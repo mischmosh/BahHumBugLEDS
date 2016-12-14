@@ -20,8 +20,7 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=20):
 	"""Wipe color across display a pixel at a time."""
-
-	for i in range(strip.numPixels()):
+	for i in range(strip.numPixels()): 
 		strip.setPixelColor(i, color)
 		strip.show()
 		time.sleep(wait_ms/1000.0)
@@ -75,34 +74,48 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
-def numb(strip, color, wait_ms=200):
-	for n in range(20):
-		strip.setPixelColor(3, red) 
-		strip.show()
-		time.sleep (wait_ms/1000.0)
-
+def numb(strip, wait_ms=20):
+	for H in range(46):
+		if H < 14:
+			strip.setPixelColorRGB(H, 0, 100, 200) 
+		elif H > 18:
+	
+			strip.setPixelColorRGB(H, 240, 128, 0)
+#		elif H -= 16
+		#	H -= 17
+#			strip.setPixelColorRGB(H, 210, 12, 100)	
+	for H in range(100):
+		if H > 47:
+			strip.setPixelColorRGB(H, 10, 123, 123)	
+	strip.show()
+	time.sleep (wait_ms/1000.0)
+	
 #def flicker(color,
 			
 #		strip.show()
 #		time.sleep(wait_ms/10
 
-#def BAHHUMBUG(strip, wait_ms=200, iterations=1):
+#def BAHHUMBUG(strip, wait_ms=200, iterations=3):
 #	"""Sequence BAH-HUM-BUG"""
 #		if
 #		strip.show()
 #		time.sleep (wait_ms/1000.0)
+def letterH(pos):
+	letterH is  1,2,3,4,5
 
-def BAH(pos, color, wait_ms=200):
+def bah(strip, wait_ms=200):
 	"""BAH"""
-	for h in range(15):
-		if pos < 4:
-			setPixelColor(blue)
-		else: 
-			pos -= 6
-			setPixelColor(red)
-		strip.setPixelColor(h, color)
-		strip.show()
-		time.sleep (wait_ms/1000.0)
+#	letterH = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,41,42,43,44,45]
+#	letterB = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+#	for h in range(15):
+#		if pos < 4:
+	strip.setPixelColorRGB(letterH, 123, 125, 198)
+#		else: 
+#			pos -= 6
+#			setPixelColor(red)
+#	strip.setPixelColor(letterB, 200, 120, 20)
+	strip.show()
+	time.sleep (wait_ms/1000.0)
 
 #def HUM(strip, wait_ms=100):
 
@@ -136,7 +149,7 @@ if __name__ == '__main__':
 #		rainbow(strip)
 #		rainbowCycle(strip)
 #		theaterChaseRainbow(strip)
-		BAH(strip)
-		numb(strip, Color(127, 127, 127))
+		bah(strip)
+		numb(strip)
 
-		colorWipe(strip, Color(0, 0, 0)) # turn off
+#		colorWipe(strip, Color(0, 0, 0)) # turn off
