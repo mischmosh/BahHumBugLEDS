@@ -7,6 +7,12 @@ import time
 
 from neopixel import *
 
+#import signal
+#import sys
+#def signal_handler(signal, frame):
+#	colorWipe(strip, Color(0,0,0))
+#	sys.exit(0)
+#signal.signal(signal.SIGNET, signal_handler)
 
 # LED strip configuration:
 LED_COUNT      = 213     # Number of LED pixels.
@@ -24,6 +30,12 @@ def colorWipe(strip, color, wait_ms=20):
 		strip.setPixelColor(i, color)
 		strip.show()
 		time.sleep(wait_ms/1000.0)
+
+def lightWipe(strip, wait_ms=2):
+	for b in range(300):
+		strip.setPixelColor(b, 0)
+		strip.show()
+		time.sleep(wait_ms/100000)
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
 	"""Movie theater light style chaser animation."""
@@ -88,7 +100,7 @@ def numb(strip, wait_ms=20):
 		if H > 47:
 			strip.setPixelColorRGB(H, 10, 123, 123)	
 	strip.show()
-	time.sleep (wait_ms/1000.0)
+	time.sleep (wait_ms/10.0)
 	
 #def flicker(color,
 			
@@ -100,22 +112,19 @@ def numb(strip, wait_ms=20):
 #		if
 #		strip.show()
 #		time.sleep (wait_ms/1000.0)
-def letterH(pos):
-	letterH is  1,2,3,4,5
+letterH = [0,1,2,3,4,5,15]
 
-def bah(strip, wait_ms=200):
+def bah(strip, wait_ms=2):
 	"""BAH"""
-#	letterH = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,41,42,43,44,45]
-#	letterB = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
-#	for h in range(15):
-#		if pos < 4:
-	strip.setPixelColorRGB(letterH, 123, 125, 198)
+	for i in letterH:
+		if i > 0:
+			strip.setPixelColorRGB(i, 123, 125, 198)
 #		else: 
 #			pos -= 6
 #			setPixelColor(red)
-#	strip.setPixelColor(letterB, 200, 120, 20)
-	strip.show()
-	time.sleep (wait_ms/1000.0)
+#		strip.setPixelColor(letterB, 200, 120, 20)
+		strip.show()
+		time.sleep (wait_ms/10000.0)
 
 #def HUM(strip, wait_ms=100):
 
@@ -149,7 +158,9 @@ if __name__ == '__main__':
 #		rainbow(strip)
 #		rainbowCycle(strip)
 #		theaterChaseRainbow(strip)
+#		lightWipe(strip)
 		bah(strip)
-		numb(strip)
+#		lightWipe(strip)
+#		numb(strip)
 
 #		colorWipe(strip, Color(0, 0, 0)) # turn off
