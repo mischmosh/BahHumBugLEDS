@@ -7,13 +7,6 @@ import time
 
 from neopixel import *
 
-#import signal
-#import sys
-#def signal_handler(signal, frame):
-#	colorWipe(strip, Color(0,0,0))
-#	sys.exit(0)
-#signal.signal(signal.SIGNET, signal_handler)
-
 # LED strip configuration:
 LED_COUNT      = 303     # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
@@ -112,18 +105,20 @@ def numb(strip, wait_ms=20):
 #		if
 #		strip.show()
 #		time.sleep (wait_ms/1000.0)
-letterH = [0,1,2,3,4,5,10,15]
+letterH = [0,5,10,15,20,25,30,35,40,45,55,60,65,70,75,80,85,90,95]
+letterB = [100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195]
+letterA = [200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300]
 
 def bah(strip, wait_ms=20):
 	"""BAH"""
-	for i in letterH:
-		strip.setPixelColorRGB(i, 123, 125, 198)
-#		else: 
-#			pos -= 6
-#			setPixelColor(red)
-#		strip.setPixelColor(letterB, 200, 120, 20)
+	for h in letterH:
+		strip.setPixelColorRGB(h, 123, 125, 198)
+	for i in letterB:
+		strip.setPixelColorRGB(i, 200, 120, 20)
+	for j in letterA:
+		strip.setPixelColorRGB(j, 240, 128, 0)
 		strip.show()
-		time.sleep (wait_ms/100.0)
+#		time.sleep (wait_ms/100.0)
 
 #def HUM(strip, wait_ms=100):
 
@@ -154,11 +149,12 @@ if __name__ == '__main__':
 #		theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
 #		theaterChase(strip, Color(  0, 127,   0))  # Red
 		# Rainbow animations.
-		rainbow(strip)
+#		rainbow(strip)
 #		rainbowCycle(strip)
 #		theaterChaseRainbow(strip)
 		lightWipe(strip)
-#		bah(strip)
+		bah(strip)
+		time.sleep(wait_ms/10000)
 #		lightWipe(strip)
 #		numb(strip)
 
