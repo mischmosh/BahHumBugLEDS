@@ -25,10 +25,10 @@ def colorWipe(strip, color, wait_ms=20):
 		time.sleep(wait_ms/1000.0)
 
 def lightWipe(strip, wait_ms=2):
-	for b in range(300):
+	for b in range(303):
 		strip.setPixelColor(b, 0)
 		strip.show()
-		time.sleep(wait_ms/100000)
+#		time.sleep(wait_ms/100000)
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
 	"""Movie theater light style chaser animation."""
@@ -79,52 +79,47 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
-def numb(strip, wait_ms=20):
-	for H in range(46):
-		if H < 4:
-			strip.setPixelColorRGB(H, 0, 255, 0) 
-		elif H > 8:
-	
-			strip.setPixelColorRGB(H, 240, 128, 0)
-#		elif H -= 16
-		#	H -= 17
-#			strip.setPixelColorRGB(H, 210, 12, 100)	
-	for H in range(100):
-		if H > 47:
-			strip.setPixelColorRGB(H, 10, 123, 123)	
-	strip.show()
-	time.sleep (wait_ms/10.0)
-	
-#def flicker(color,
-			
-#		strip.show()
-#		time.sleep(wait_ms/10
+letterB1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,90,91,92,93,94]
+letterA2 = [100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,180,181,182,183,184]
+letterH3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,274,275,276,277,278,279,280,281,282,283,284,285] 
 
-#def BAHHUMBUG(strip, wait_ms=200, iterations=3):
-#	"""Sequence BAH-HUM-BUG"""
-#		if
-#		strip.show()
-#		time.sleep (wait_ms/1000.0)
-letterH = [0,5,10,15,20,25,30,35,40,45,55,60,65,70,75,80,85,90,95]
-letterB = [100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195]
-letterA = [200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300]
+letterH1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99]
+letterU2 = [125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179]
+letterM3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253]
+
+letterG3 = [191,192,193,194,195,196,197,198,199,200,201,237,238,246,247,248,249,250,251,252,253,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303]
 
 def bah(strip, wait_ms=20):
 	"""BAH"""
-	for h in letterH:
-		strip.setPixelColorRGB(h, 123, 125, 198)
-	for i in letterB:
-		strip.setPixelColorRGB(i, 200, 120, 20)
-	for j in letterA:
-		strip.setPixelColorRGB(j, 240, 128, 0)
+	for h in letterB1:
+		strip.setPixelColorRGB(h, 0, 255, 0)
+	for i in letterA2:
+		strip.setPixelColorRGB(i, 0, 255, 0)
+	for j in letterH3:
+		strip.setPixelColorRGB(j, 0, 255, 0)
 		strip.show()
 #		time.sleep (wait_ms/100.0)
 
-#def HUM(strip, wait_ms=100):
+def hum(strip, wait_ms=20):
+	"""HUM"""
+	for h in letterH1:
+		strip.setPixelColorRGB(h, 127, 127, 127)
+	for i in letterU2:
+		strip.setPixelColorRGB(i, 127, 127, 127)
+	for j in letterM3:
+		strip.setPixelColorRGB(j, 127, 127, 127)
+		strip.show()
 
 
-
-#def BUG(strip, wait_ms=100):
+def bug(strip, wait_ms=20):
+	"""BUG"""
+	for h in letterB1:
+		strip.setPixelColorRGB(h, 0, 255, 0)
+	for i in letterU2:
+		strip.setPixelColorRGB(i, 0, 255, 0)
+	for j in letterG3:
+		strip.setPixelColorRGB(j, 0, 255, 0)
+		strip.show()
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -152,10 +147,14 @@ if __name__ == '__main__':
 #		rainbow(strip)
 #		rainbowCycle(strip)
 #		theaterChaseRainbow(strip)
-		lightWipe(strip)
+		lightWipe(strip)  # lights out
 		bah(strip)
-		time.sleep(wait_ms/10000)
-#		lightWipe(strip)
-#		numb(strip)
+		time.sleep(3)
 
-#		colorWipe(strip, Color(0, 0, 0)) # turn off
+		lightWipe(strip)
+		hum(strip)
+		time.sleep(3)
+
+		lightWipe(strip)
+		bug(strip)
+		time.sleep(3)
