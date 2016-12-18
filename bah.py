@@ -103,11 +103,11 @@ def bah(strip, wait_ms=20):
 def hum(strip, wait_ms=20):
 	"""HUM"""
 	for h in letterH1:
-		strip.setPixelColorRGB(h, 127, 127, 127)
+		strip.setPixelColorRGB(h, 0,255,0)
 	for i in letterU2:
-		strip.setPixelColorRGB(i, 127, 127, 127)
+		strip.setPixelColorRGB(i, 0,255,0)
 	for j in letterM3:
-		strip.setPixelColorRGB(j, 127, 127, 127)
+		strip.setPixelColorRGB(j, 0,255,0)
 		strip.show()
 
 
@@ -130,31 +130,21 @@ if __name__ == '__main__':
 
 	print ('Press Ctrl-C to quit.')
 	while True:
-		# Color wipe animations.
-#		colorWipe(strip, Color(0, 255, 0))  # Red wipe
-#		colorWipe(strip, Color(63, 255, 0)) # Orange wipe
-#		colorWipe(strip, Color(127, 255, 0)) # Yellow wipe
-#		colorWipe(strip, Color(255, 0, 0))  # Green wipe
-#		colorWipe(strip, Color(0, 0, 255))  # Blue wipe
-#		colorWipe(strip, Color(0, 63, 255)) # Purple?
 		# Theater chase animations.
-#		theaterChase(strip, Color(127, 127, 127))  # White theater chase
-#		theaterChase(strip, Color(127,   0,   0))  # Green theater chase
-#		theaterChase(strip, Color(127, 255,   0))  # Yellow?
-#		theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
-#		theaterChase(strip, Color(  0, 127,   0))  # Red
-		# Rainbow animations.
-#		rainbow(strip)
-#		rainbowCycle(strip)
-#		theaterChaseRainbow(strip)
-		lightWipe(strip)  # lights out
+		theaterChase(strip, Color(127, 127, 127))  # White theater chase
+
+#		lightWipe(strip)  # lights out
 		bah(strip)
-		time.sleep(3)
+		time.sleep(2)
 
-		lightWipe(strip)
+		theaterChase(strip, Color(127,127,127))
+#		lightWipe(strip)
 		hum(strip)
-		time.sleep(3)
+		time.sleep(2)
 
-		lightWipe(strip)
+		theaterChase(strip, Color(127,127,127))
+#		lightWipe(strip)
 		bug(strip)
-		time.sleep(3)
+		time.sleep(2)
+
+		theaterChase(strip, Color(127,127,127))
