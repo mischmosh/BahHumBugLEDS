@@ -92,32 +92,32 @@ letterG3 = [191,192,193,194,195,196,197,198,199,200,201,237,238,246,247,248,249,
 def bah(strip, wait_ms=5):
 	"""BAH"""
 	for h in letterB1:
-		strip.setPixelColorRGB(h, 0, 255, 0)
+		strip.setPixelColorRGB(h, 0, 55, 0)
 	for i in letterA2:
-		strip.setPixelColorRGB(i, 0, 255, 0)
+		strip.setPixelColorRGB(i, 0, 55, 0)
 	for j in letterH3:
-		strip.setPixelColorRGB(j, 0, 255, 0)
+		strip.setPixelColorRGB(j, 0, 55, 0)
 		strip.show()
 #		time.sleep (wait_ms/100.0)
 
 def hum(strip, wait_ms=5):
 	"""HUM"""
 	for h in letterH1:
-		strip.setPixelColorRGB(h, 0,255,0)
+		strip.setPixelColorRGB(h, 0,55,0)
 	for i in letterU2:
-		strip.setPixelColorRGB(i, 0,255,0)
+		strip.setPixelColorRGB(i, 0,55,0)
 	for j in letterM3:
-		strip.setPixelColorRGB(j, 0,255,0)
+		strip.setPixelColorRGB(j, 0,55,0)
 		strip.show()
 
 def bug(strip, wait_ms=5):
 	"""BUG"""
 	for h in letterB1:
-		strip.setPixelColorRGB(h, 0, 255, 0)
+		strip.setPixelColorRGB(h, 0, 55, 0)
 	for i in letterU2:
-		strip.setPixelColorRGB(i, 0, 255, 0)
+		strip.setPixelColorRGB(i, 0, 55, 0)
 	for j in letterG3:
-		strip.setPixelColorRGB(j, 0, 255, 0)
+		strip.setPixelColorRGB(j, 0, 55, 0)
 		strip.show()
 
 # Main program logic follows:
@@ -137,14 +137,14 @@ if __name__ == '__main__':
 		bah(strip)
 		time.sleep(2)
 
-		theaterChase(strip, Color(127,127,127))
+		theaterChase(strip, Color(19,19,19))
 #		lightWipe(strip)
 		hum(strip)
 		time.sleep(2)
 
-		theaterChase(strip, Color(127,127,127))
+		theaterChase(strip, Color(19,19,19))
 #		lightWipe(strip)
 		bug(strip)
 		time.sleep(2)
 
-		theaterChase(strip, Color(127,127,127))
+		theaterChase(strip, Color(19,19,19))
