@@ -4,6 +4,7 @@
 # Direct port of the Arduino NeoPixel library strandtest example.  Showcases
 # various animations on a strip of NeoPixels.
 import time
+import datetime
 
 from neopixel import *
 
@@ -30,7 +31,7 @@ def lightWipe(strip, wait_ms=2):
 		strip.show()
 #		time.sleep(wait_ms/100000)
 
-def theaterChase(strip, color, wait_ms=50, iterations=10):
+def theaterChase(strip, color, wait_ms=60, iterations=5):
 	"""Movie theater light style chaser animation."""
 	for j in range(iterations):
 		for q in range(3):
@@ -89,18 +90,17 @@ letterM3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,
 
 letterG3 = [191,192,193,194,195,196,197,198,199,200,201,237,238,246,247,248,249,250,251,252,253,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303]
 
-def bah(strip, wait_ms=5):
+def bah(strip, wait_ms=10):
 	"""BAH"""
 	for h in letterB1:
 		strip.setPixelColorRGB(h, 0, 255, 0)
 	for i in letterA2:
 		strip.setPixelColorRGB(i, 0, 255, 0)
-	for j in letterH3:
+	for j  in letterH3:
 		strip.setPixelColorRGB(j, 0, 255, 0)
-		strip.show()
-#		time.sleep (wait_ms/100.0)
+	strip.show()
 
-def hum(strip, wait_ms=5):
+def hum(strip, wait_ms=10):
 	"""HUM"""
 	for h in letterH1:
 		strip.setPixelColorRGB(h, 0,255,0)
@@ -108,7 +108,7 @@ def hum(strip, wait_ms=5):
 		strip.setPixelColorRGB(i, 0,255,0)
 	for j in letterM3:
 		strip.setPixelColorRGB(j, 0,255,0)
-		strip.show()
+	strip.show()
 
 def bug(strip, wait_ms=5):
 	"""BUG"""
@@ -118,7 +118,19 @@ def bug(strip, wait_ms=5):
 		strip.setPixelColorRGB(i, 0, 255, 0)
 	for j in letterG3:
 		strip.setPixelColorRGB(j, 0, 255, 0)
-		strip.show()
+	strip.show()
+onhour = 17
+offhour = 21
+offminute = 15
+#now = datetime.hour()
+#offTime = now.replace(hour=offhour, minute=offminute, second=0, microsecond=0)
+#onTime = now.replace(hour=onhour, minute=offminute, second=0, microsecond=0)
+
+#def sleepTime(datetime):
+#	while (datetime.hour() < onTime) or (datetime.hour() > offTime):
+#		colorWipe(strip, Color(0,0,0))
+#		time.sleep(1)
+#	else: 
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -129,6 +141,8 @@ if __name__ == '__main__':
 
 	print ('Press Ctrl-C to quit.')
 	while True:
+#		sleepTime(datetime.now())
+
 		# Theater chase animations.
 		theaterChase(strip, Color(127, 127, 127))  # White theater chase
 
@@ -136,7 +150,7 @@ if __name__ == '__main__':
 		strip._cleanup
 		bah(strip)
 		time.sleep(2)
-
+		
 		theaterChase(strip, Color(127,127,127))
 #		lightWipe(strip)
 		hum(strip)
@@ -147,4 +161,6 @@ if __name__ == '__main__':
 		bug(strip)
 		time.sleep(2)
 
+		theaterChase(strip, Color(127,127,127))
+		theaterChase(strip, Color(127,127,127))
 		theaterChase(strip, Color(127,127,127))
