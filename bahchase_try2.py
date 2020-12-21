@@ -5,9 +5,11 @@
 # various animations on a strip of NeoPixels.
 import time
 import datetime
+import signal 
+import sys
+import os
 
 from neopixel import *
-
 
 # LED strip configuration:
 LED_COUNT      = 303     # Number of LED pixels.
@@ -85,8 +87,8 @@ chaseG3a = [191,194,197,200,    237,287,290,293,296,299,302,  255,258,261,264,26
 chaseG3b = [192,195,198,201,        286,289,292,295,298,301,  256,259,262,265,268,271,246,249,252]
 chaseG3c = [193,196,199,    236,    288,291,294,297,300,303,  257,260,263,266,269,272,247,250,253]
 
-#, wait_ms=60, iterations=5
-def bah(strip, color):
+#
+def bah(strip, color, wait_ms=60, iterations=5):
 	"""BAH"""
 	for p in range(iterations):
 	        for q in range(3):
@@ -97,7 +99,7 @@ def bah(strip, color):
 			for j  in chaseH3a:
 				strip.setPixelColor(j,color)
         	        strip.show()
-                	time.sleep(wait_ms/60)
+                	time.sleep(wait_ms/1000)
                 	for k in range(strip.numPixels()):
                 		strip.setPixelColor(k,0)
                 	strip.show()
@@ -109,7 +111,7 @@ def bah(strip, color):
                 	for j  in chaseH3b:
                 		strip.setPixelColor(j,color)
                 	strip.show()
-                	time.sleep(wait_ms/60)
+                	time.sleep(wait_ms/1000)
                 	for k in range(strip.numPixels()):
                 		strip.setPixelColor(k,0)
                 	strip.show()
@@ -121,12 +123,12 @@ def bah(strip, color):
                 	for j  in chaseH3c:
                 		strip.setPixelColor(j,color)
                 	strip.show()
-                	time.sleep(wait_ms/60)
+                	time.sleep(wait_ms/1000)
                 	for k in range(strip.numPixels()):
                 		strip.setPixelColor(k,0)
                 	strip.show()
 
-def hum(strip, color):
+def hum(strip, color, wait_ms=60, iterations=5):
 	"""HUM"""
 	for p in range(iterations):
 	        for q in range(3):
@@ -137,7 +139,7 @@ def hum(strip, color):
             		for j  in chaseM3a:
                 		strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
             			strip.setPixelColor(k,0)
             		strip.show()
@@ -149,7 +151,7 @@ def hum(strip, color):
             		for j  in chaseM3b:
                 		strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
             			strip.setPixelColor(k,0)
             		strip.show()
@@ -161,12 +163,12 @@ def hum(strip, color):
             		for j  in chaseM3c:
             			strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
             			strip.setPixelColor(k,0)
             		strip.show()
 
-def bug(strip, color):
+def bug(strip, color, wait_ms=60, iterations=5):
 	"""BUG"""
 	for p in range(iterations):
 	        for q in range(3):
@@ -177,7 +179,7 @@ def bug(strip, color):
             		for j  in chaseG3a:
                 		strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
             			strip.setPixelColor(k,0)
             		strip.show()
@@ -189,7 +191,7 @@ def bug(strip, color):
             		for j  in chaseG3b:
                 		strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
                 		strip.setPixelColor(k,0)
             		strip.show()
@@ -201,15 +203,32 @@ def bug(strip, color):
             		for j  in chaseG3c:
                 		strip.setPixelColor(j,color)
             		strip.show()
-            		time.sleep(wait_ms/60)
+            		time.sleep(wait_ms/1000)
             		for k in range(strip.numPixels()):
             			strip.setPixelColor(k,0)
             		strip.show()
 
 
+# Define a function for SIGTERM
+def lights_off(signal, fram):
+	 print 'Lights Off Time To Go TO Bed BahHumBug'
+	 set_grb(strip,range(0,LED_COUNT+1), 0, 0, 0)
+	 sys.exit(0)
+	 
+
 
 # Main program logic follows:
 if __name__ == '__main__':
+	
+	# Set SIGTERM handler to lights_off
+	signal.signal(signal.SIGTERM, lights_off)
+	# write current pid to file
+	pid = os.getpid()
+	pid_f = open('/home/pi/bahhumbugleds/bahchase_pid.txt','w')
+	pid_f.write(str(pid))
+	pid_f.close()	
+	
+	
 	# Create NeoPixel object with appropriate configuration.
 	strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
 	# Intialize the library (must be called once before other functions).
@@ -220,22 +239,20 @@ if __name__ == '__main__':
 
 
 		# Theater chase animations.
-		theaterChase(strip, Color(127, 127, 127))  # White theater chase
-
-#		lightWipe(strip)  # lights out
-#		strip._cleanup
-		bah(strip, Color(255,0,0))
+		theaterChase(strip, Color(90,90,90))  # White theater chase
+		strip._cleanup
+		
+		bah(strip, Color(0,255,0))
 		time.sleep(1)
-#		theaterChase(strip, Color(127,127,127))
-#		lightWipe(strip)
-		hum(strip, Color(0,0,255))
+#		theaterChase(strip, Color(90,90,90))
+
+		hum(strip, Color(0,255,0))
 		time.sleep(1)
 
-#		theaterChase(strip, Color(127,127,127))
-#		lightWipe(strip)
+#		theaterChase(strip, Color(90,90,90))
 		bug(strip, Color(0,255,0))
 		time.sleep(1)
 
-		theaterChase(strip, Color(127,127,127))
+		theaterChase(strip, Color(90,90,90))
 #		theaterChase(strip, Color(127,127,127))
 #		theaterChase(strip, Color(0,255,0))  # Red theater chase

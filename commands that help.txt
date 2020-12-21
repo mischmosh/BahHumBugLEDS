@@ -1,0 +1,25 @@
+crontab -e (edit)
+crontab -l (list)
+
+sudo python bahhumbugleds/bah.py
+sudo python bahhumbugleds/stop.py
+
+cd bahhumbugleds (change directory...)	
+git status
+git add -A (add all files in directory to repository)
+git push (push git repository to website)
+
+
+    2  sudo apt-get install realvnc-vnc-server
+    3  sudo raspi-config
+    4  git clone https://github.com/mischmosh/bahhumbugleds
+    5  git clone https://github.com/mischmosh/rpi_ws281x
+
+
+  133  apt install scons
+  134  apt search scons
+  135  sudo apt install scons
+  136  vi main.c 
+  137  scons
+  138  sudo ./test 
+  139  sudo apt install python-dev swig

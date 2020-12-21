@@ -36,4 +36,4 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 	while True:
 		
-		colorWipe (strip, Color(0, 0, 0)) # turn off
+		colorWipe(strip, Color(0,0,0)) # turn off

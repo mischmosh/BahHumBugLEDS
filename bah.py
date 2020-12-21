@@ -119,7 +119,7 @@ letterH3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight 
 letterM3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight + w3_left_straight + w3_upper_right_straight + w3_upper_left_straight + w3_upper_valley
 letterG3 = w3_upper_arc + w3_left_straight + w3_lower_arc + w3_lower_right_straightG
 
-
+# Old painfully entered led sets
 #letterB1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,90,91,92,93,94]
 #letterA2 = [100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,180,181,182,183,184]
 #letterH3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,274,275,276,277,278,279,280,281,282,283,284,285] 
@@ -131,6 +131,8 @@ letterG3 = w3_upper_arc + w3_left_straight + w3_lower_arc + w3_lower_right_strai
 #letterG3 = [191,192,193,194,195,196,197,198,199,200,201,237,238,246,247,248,249,250,251,252,253,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303]
 
 bah_pixels = letterB1 + letterA2 + letterH3
+hum_pixels = letterH1 + letterU2 + letterM3
+bug_pixels = letterB1 + letterU2 + letterG3
 
 color_red = [0 , 255, 0]
 
@@ -140,34 +142,22 @@ def set_grb(strip, pixels, g, r, b):
 	strip.show()
 	
 
-def bah(strip, wait_ms=10):
+def bah(strip, color, wait_ms=15):
 	"""BAH"""
-	for h in letterB1:
-		strip.setPixelColorRGB(h, 0, 255, 0)
-	for i in letterA2:
-		strip.setPixelColorRGB(i, 0, 255, 0)
-	for j  in letterH3:
-		strip.setPixelColorRGB(j, 0, 255, 0)
+	for h in bah_pixels:
+		strip.setPixelColor(h, color)
 	strip.show()
 
-def hum(strip, wait_ms=10):
+def hum(strip, color, wait_ms=15):
 	"""HUM"""
-	for h in letterH1:
-		strip.setPixelColorRGB(h, 0,255,0)
-	for i in letterU2:
-		strip.setPixelColorRGB(i, 0,255,0)
-	for j in letterM3:
-		strip.setPixelColorRGB(j, 0,255,0)
+	for h in hum_pixels:
+		strip.setPixelColor(h, color)
 	strip.show()
 
-def bug(strip, wait_ms=5):
+def bug(strip, color, wait_ms=15):
 	"""BUG"""
-	for h in letterB1:
-		strip.setPixelColorRGB(h, 0, 255, 0)
-	for i in letterU2:
-		strip.setPixelColorRGB(i, 0, 255, 0)
-	for j in letterG3:
-		strip.setPixelColorRGB(j, 0, 255, 0)
+	for h in bug_pixels:
+		strip.setPixelColor(h, color)
 	strip.show()
 
 # Define a function for SIGTERM
@@ -208,19 +198,19 @@ if __name__ == '__main__':
 
 #		lightWipe(strip)  # lights out
 		strip._cleanup
-		bah(strip)
+		bah(strip, Color(0,255,0))
 		time.sleep(2)
 		
 		theaterChase(strip, Color(127,127,127))
 #		lightWipe(strip)
-		hum(strip)
+		hum(strip, Color(0,255,0))
 		time.sleep(2)
 
 		theaterChase(strip, Color(127,127,127))
 #		lightWipe(strip)
-		bug(strip)
+		bug(strip, Color(0,255,0))
 		time.sleep(2)
 
-		theaterChase(strip, Color(127,127,127))
+#		theaterChase(strip, Color(127,127,127))
 		theaterChase(strip, Color(127,127,127))
 		theaterChase(strip, Color(127,127,127))
