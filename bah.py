@@ -3,13 +3,16 @@
 #
 # Direct port of the Arduino NeoPixel library strandtest example.  Showcases
 # various animations on a strip of NeoPixels.
-import time
-import datetime
+import os
+import random
 import signal 
 import sys
-import os
+import time
 
 from neopixel import *
+
+# Custom library imports
+from letters import *
 
 # LED strip configuration:
 LED_COUNT      = 303     # Number of LED pixels.
@@ -21,29 +24,138 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 
 
 # Define functions which animate LEDs in various ways.
-def colorWipe(strip, color, wait_ms=20):
-	"""Wipe color across display a pixel at a time."""
-	for i in range(strip.numPixels()): 
-		strip.setPixelColor(i, color)
-		strip.show()
-		time.sleep(wait_ms/1000.0)
 
-def lightWipe(strip, wait_ms=2):
-	for b in range(303):
-		strip.setPixelColor(b, 0)
-		strip.show()
-#		time.sleep(wait_ms/100000)
-
-def theaterChase(strip, color, wait_ms=60, iterations=5):
+def theaterChase(strip, color, wait_ms=60, iterations=5, interval_size=3):
 	"""Movie theater light style chaser animation."""
 	for j in range(iterations):
-		for q in range(3):
-			for i in range(0, strip.numPixels(), 3):
+		for q in range(interval_size):
+			for i in range(0, strip.numPixels(), interval_size):
 				strip.setPixelColor(i+q, color)
 			strip.show()
 			time.sleep(wait_ms/1000.0)
-			for i in range(0, strip.numPixels(), 3):
-				strip.setPixelColor(i+q, 0)
+			for i in range(0, strip.numPixels(),interval_size):
+				strip.setPixelColor(i+q, 10)
+	set_grb(strip) # clear pixels
+
+def sparkleRandom(strip, pixels=None, sec=2, cps=20, frac=0.2):
+	if pixels is None:
+		pixels = range(strip.numPixels())
+
+	set_grb(strip, pixels) # clear pixels
+
+	cycles = int(sec * cps)
+	cycle_length = 1.0 / cps
+	for i in range(cycles):
+		lit = random.sample(pixels, int(frac*len(pixels)))
+		for p in lit:
+			strip.setPixelColor(p, Color(200,200,200))
+		strip.show()
+		time.sleep(cycle_length)
+	
+
+def sparklePopRandom(strip, pixels=None, sec=2, cps=100):
+	if pixels is None:
+		pixels = range(strip.numPixels())
+
+	set_grb(strip, pixels) # clear pixels
+
+	pool = [ p for p in pixels]
+	lit = []
+
+	cycles = int(sec * cps)
+	cycle_length = 1.0 / cps
+
+	for i in range(cycles):
+		# pop from pool
+		lit.append( (pool.pop(random.randrange(len(pool))), 255) )
+		still_lit = []
+		for p , v in lit:
+			if v > 0:
+				strip.setPixelColor(p, Color(v,v,v))
+				still_lit.append( (p, v-5))
+			else:
+				pool.append(p)
+		lit = still_lit
+		strip.show()
+		time.sleep(cycle_length)
+		
+
+def sparkleChristmas(strip, pixels=None, sec=2, cps=10, w=4):
+	if pixels is None:
+		pixels = range(strip.numPixels())
+
+	colors = [Color(255,0,0), Color(0,255,0), Color(200,200,200)]
+
+	cycles = int(sec * cps)
+	cycle_length = 1.0 / cps
+
+	for i in range(cycles):
+		for p_start in range(0, len(pixels), w):
+			c = random.choice(colors)
+			for p in range(p_start,p_start+w):
+				if p < len(pixels):
+					strip.setPixelColor(pixels[p],c)
+			strip.show()
+	time.sleep(cycle_length)
+	
+
+def paintCandyCane(strip, pixels=None, n=10):
+	# n: number of pixels in batch
+	if pixels is None:
+		pixels = range(strip.numPixels())
+
+	for idx , p in enumerate(pixels):
+		color = Color(0, 255, 0) if (idx/n) % 2 == 0 else Color(200,200,200)
+		strip.setPixelColor(p,color) 
+
+def wave(strip, pixels=None, initPaint=None, sec=2, cps=60):
+	""" Move the pixels along at fps for sec
+	    initPaint: initial paint function (none keeps pixels as is)
+	    sec: number of seconds to wave for.
+	    cps: cycles per second (speed of wave)
+	"""
+	if pixels is None:
+		pixels = range(strip.numPixels())
+
+	if initPaint is not None:
+		initPaint(strip, pixels)
+
+	cycles = int(sec * cps)
+	cycle_length = 1.0 / cps
+	for i in range(cycles):
+		rotateOnePixel(strip, pixels)
+		time.sleep(cycle_length)
+	
+	
+def rotateOnePixel(strip, pixels):
+	prev_color = strip.getPixelColor(pixels[-1])	
+	for idx in range(len(pixels)):
+		tmp_color = strip.getPixelColor(pixels[idx])
+		strip.setPixelColor(pixels[idx], prev_color)
+		prev_color = tmp_color
+	strip.show()
+
+
+def rotateBUG(strip, sec=2, cps=10):
+
+	cycles = int(sec * cps)
+	cycle_length = 1.0 / cps
+	for i in range(cycles):
+		if i % 4 == 0:
+			set_grb(strip, letterB1, r=255)
+			set_grb(strip, letterA2, g=255)
+			set_grb(strip, letterH3, g=255)
+		elif i % 4 == 2:
+			set_grb(strip, letterB1, g=255)
+			set_grb(strip, letterA2, g=255)
+			set_grb(strip, letterH3, r=255)
+		else:
+			set_grb(strip, letterB1, g=255)
+			set_grb(strip, letterA2, r=255)
+			set_grb(strip, letterH3, g=255)
+		strip.show()
+		time.sleep(cycle_length)
+	
 
 def wheel(pos):
 	"""Generate rainbow colors across 0-255 positions."""
@@ -83,97 +195,45 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
-w1_left_straight = range(0,22)
-w1_right_arcs = range(23,65) + range(90,96)
-w1_right_straight = range(77,99)
-w1_middle_bar_left = range(65,72)
-w1_middle_bar_full = w1_middle_bar_left + range(72,77)
 
-w2_left_swoop = range(147,180)
-w2_diagnol = range(100,125)
-w2_middle_bar = range(141,147)
-w2_right_upper_straight = range(125, 141)
-w2_right_lower_straight = range(180,185)
+def sleep_ms(ms=0):
+	if ms > 0:
+		time.sleep(ms/1000.0)
 
-w3_lower_left_straight = range(185,191)
-w3_left_straight = range(191,202)
-w3_upper_left_straight = range(202,208)
+def set_grb(strip, pixels=None, g=0, r=0, b=0, ms=0):
+	""" 
+	The strip uses a GRB varient so swap red and green.
+	If no color value set for chanel use 0.
+	If no pixels set use whole strip.
+	"""
+	set_color(strip, pixels, Color(g, r, b), ms)
 
-w3_lower_right_straight = range(248,254)
-w3_lower_right_straightG = range(246,254)
-w3_right_straight = range(237,248)
-w3_upper_right_straight = range(231,237)
+def set_color(strip, pixels=None, color=0, ms=0):
 
-w3_lower_arc = range(255,273)
-w3_upper_arc = range(286,304)
-w3_upper_valley = range(208,231)
-w3_middle_bar = range(274,286) 
+	if pixels is None:
+		pixels = range(strip.numPixels())
 
-letterB1 = w1_left_straight + w1_right_arcs + w1_middle_bar_left
-letterH1 = w1_left_straight + w1_middle_bar_full + w1_right_straight
-
-letterA2 = w2_diagnol + w2_middle_bar + w2_right_lower_straight + w2_right_upper_straight
-letterU2 = w2_left_swoop + w2_right_upper_straight
-
-letterH3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight + w3_left_straight + w3_upper_right_straight + w3_upper_left_straight + w3_middle_bar
-letterM3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight + w3_left_straight + w3_upper_right_straight + w3_upper_left_straight + w3_upper_valley
-letterG3 = w3_upper_arc + w3_left_straight + w3_lower_arc + w3_lower_right_straightG
-
-# Old painfully entered led sets
-#letterB1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,90,91,92,93,94]
-#letterA2 = [100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,180,181,182,183,184]
-#letterH3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,274,275,276,277,278,279,280,281,282,283,284,285] 
-
-#letterH1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99]
-#letterU2 = [125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179]
-#letterM3 = [185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253]
-
-#letterG3 = [191,192,193,194,195,196,197,198,199,200,201,237,238,246,247,248,249,250,251,252,253,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303]
-
-bah_pixels = letterB1 + letterA2 + letterH3
-hum_pixels = letterH1 + letterU2 + letterM3
-bug_pixels = letterB1 + letterU2 + letterG3
-
-color_red = [0 , 255, 0]
-
-def set_grb(strip, pixels, g, r, b):
 	for p in pixels:
-		strip.setPixelColorRGB(p,g,r,b)
-	strip.show()
-	
-
-def bah(strip, color, wait_ms=15):
-	"""BAH"""
-	for h in bah_pixels:
-		strip.setPixelColor(h, color)
+		strip.setPixelColor(p, color)
+		if ms > 0:
+			sleep_ms(ms)
+			strip.show()
 	strip.show()
 
-def hum(strip, color, wait_ms=15):
-	"""HUM"""
-	for h in hum_pixels:
-		strip.setPixelColor(h, color)
-	strip.show()
-
-def bug(strip, color, wait_ms=15):
-	"""BUG"""
-	for h in bug_pixels:
-		strip.setPixelColor(h, color)
-	strip.show()
 
 # Define a function for SIGTERM
 def lights_off(signal, fram):
 	 print 'Lights Off Time To Go TO Bed BahHumBug'
-	 set_grb(strip,range(0,LED_COUNT+1), 0, 0, 0)
+	 set_grb(strip)
 	 sys.exit(0)
-	 
-
-
 
 # Main program logic follows:
 if __name__ == '__main__':
 	
 	# Set SIGTERM handler to lights_off
 	signal.signal(signal.SIGTERM, lights_off)
+	signal.signal(signal.SIGINT, lights_off)
+
 	# write current pid to file
 	pid = os.getpid()
 	pid_f = open('/home/pi/bahhumbugleds/bah_pid.txt','w')
@@ -183,34 +243,25 @@ if __name__ == '__main__':
 
 	# Create NeoPixel object with appropriate configuration.
 	strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-	#strip = adafruit_blinka(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-
 
 	# Intialize the library (must be called once before other functions).
 	strip.begin()
 
 	print ('Press Ctrl-C to quit.')
 	while True:
-#		sleepTime(datetime.now())
 
-		# Theater chase animations.
-		theaterChase(strip, Color(127, 127, 127))  # White theater chase
+		# set_grb(strip, letterB1, g=255)
+		# set_grb(strip, letterA2, r=255)
+		# set_grb(strip, letterH3, g=255)
+		# wave(strip, bah_pixels, sec=2, cps=200)
+		rotateBUG(strip)
+		set_grb(strip)
 
-#		lightWipe(strip)  # lights out
-		strip._cleanup
-		bah(strip, Color(0,255,0))
-		time.sleep(2)
-		
-		theaterChase(strip, Color(127,127,127))
-#		lightWipe(strip)
-		hum(strip, Color(0,255,0))
-		time.sleep(2)
+		wave(strip, hum_pixels, paintCandyCane, sec=2)
+		set_grb(strip)
 
-		theaterChase(strip, Color(127,127,127))
-#		lightWipe(strip)
-		bug(strip, Color(0,255,0))
-		time.sleep(2)
+		sparkleChristmas(strip, bug_pixels, sec=2)
+		set_grb(strip)
 
-#		theaterChase(strip, Color(127,127,127))
-		theaterChase(strip, Color(127,127,127))
-		theaterChase(strip, Color(127,127,127))
+		sparklePopRandom(strip, sec=2)
+		set_grb(strip)
