@@ -126,7 +126,6 @@ def wave(strip, pixels=None, initPaint=None, sec=2, cps=60):
 		rotateOnePixel(strip, pixels)
 		time.sleep(cycle_length)
 	
-	
 def rotateOnePixel(strip, pixels):
 	prev_color = strip.getPixelColor(pixels[-1])	
 	for idx in range(len(pixels)):
@@ -134,7 +133,6 @@ def rotateOnePixel(strip, pixels):
 		strip.setPixelColor(pixels[idx], prev_color)
 		prev_color = tmp_color
 	strip.show()
-
 
 def rotateBUG(strip, sec=2, cps=10):
 
@@ -155,7 +153,6 @@ def rotateBUG(strip, sec=2, cps=10):
 			set_grb(strip, letterH3, g=255)
 		strip.show()
 		time.sleep(cycle_length)
-	
 
 def wheel(pos):
 	"""Generate rainbow colors across 0-255 positions."""
