@@ -134,7 +134,7 @@ def rotateOnePixel(strip, pixels):
 		prev_color = tmp_color
 	strip.show()
 
-def rotateBUG(strip, sec=2, cps=10):
+def rotateBUG(strip, sec=2, cps=6):
 
 	cycles = int(sec * cps)
 	cycle_length = 1.0 / cps

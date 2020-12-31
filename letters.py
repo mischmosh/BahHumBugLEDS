@@ -14,40 +14,45 @@
 # New Letters
 
 w1_left_straight = range(0,22)
-w1_right_arcs = range(23,65) + range(90,96)
-w1_right_straight = range(77,99)
 w1_middle_bar_left = range(65,72)
+w1_upper_arc = range(23,41) + range(71,64,-1)
+w1_lower_arc = range(41,50) + range(90,95) + range(50,65)
+w1_right_straight = range(77,100)
 w1_middle_bar_full = w1_middle_bar_left + range(72,77)
 
 w2_left_swoop = range(147,180)
 w2_diagnol = range(100,125)
-w2_middle_bar = range(141,147)
+w2_middle_bar = range(146,140,-1)
 w2_right_upper_straight = range(125, 141)
+w2_right_upper_straight_rev = range(140,124,-1)
 w2_right_lower_straight = range(180,185)
 
+w3_left_straight_full = range(185,208)
 w3_lower_left_straight = range(185,191)
 w3_left_straight = range(191,202)
+w3_left_straight_rev = range(201,190,-1)
 w3_upper_left_straight = range(202,208)
 
+w3_right_straight_full = range(231,254)
 w3_lower_right_straight = range(248,254)
 w3_lower_right_straightG = range(246,254)
 w3_right_straight = range(237,248)
 w3_upper_right_straight = range(231,237)
 
-w3_lower_arc = range(255,273)
+w3_lower_arc = range(272,254,-1)
 w3_upper_arc = range(286,304)
 w3_upper_valley = range(208,231)
 w3_middle_bar = range(274,286) 
 
-letterB1 = w1_left_straight + w1_right_arcs + w1_middle_bar_left
+letterB1 = w1_left_straight + w1_upper_arc + w1_lower_arc
 letterH1 = w1_left_straight + w1_middle_bar_full + w1_right_straight
 
-letterA2 = w2_diagnol + w2_middle_bar + w2_right_lower_straight + w2_right_upper_straight
-letterU2 = w2_left_swoop + w2_right_upper_straight
+letterA2 = w2_diagnol + w2_right_upper_straight + w2_right_lower_straight + w2_middle_bar
+letterU2 = w2_left_swoop + w2_right_upper_straight_rev
 
-letterH3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight + w3_left_straight + w3_upper_right_straight + w3_upper_left_straight + w3_middle_bar
-letterM3 = w3_lower_right_straight + w3_lower_left_straight + w3_right_straight + w3_left_straight + w3_upper_right_straight + w3_upper_left_straight + w3_upper_valley
-letterG3 = w3_upper_arc + w3_left_straight + w3_lower_arc + w3_lower_right_straightG
+letterH3 = w3_left_straight_full + w3_middle_bar + w3_right_straight_full
+letterM3 = w3_left_straight_full + w3_upper_valley + w3_right_straight_full
+letterG3 = w3_upper_arc + w3_left_straight_rev + w3_lower_arc + w3_lower_right_straightG
 
 
 bah_pixels = letterB1 + letterA2 + letterH3
