@@ -1,8 +1,8 @@
 from __future__ import print_function
 
-from colors import *
+from colors import Colors, Patterns
 from setup_bah_hum_bug import *
-from utils import *
+from utils import Effects
 
 
 if __name__ == '__main__':
@@ -36,21 +36,21 @@ if __name__ == '__main__':
                 p2=Patterns.Christmas.make(),
                 p3=Patterns.Christmas.make(w=5))
 
-        print("BAH: Green Red Green")
+        print("BAH: Green Red Green fade 4se")
         bah.set_letter(1, Colors.Green)
         bah.set_letter(2, Colors.Red)
         bah.set_letter(3, Colors.Green)
         strip.show()
         fade_effect.apply(bah, sec=4) 
 
-        print("HUM: Red Green Red")
+        print("HUM: Red Green Red fade 2.5sec")
         hum.set_letter(1, Colors.Red)
         hum.set_letter(2, Colors.Green)
         hum.set_letter(3, Colors.Red)
         strip.show()
         fade_effect.apply(hum, sec=2.5) 
 
-        print("BUG: Red Red Red")
+        print("BUG: Red Red Red fasde 1.5sec")
         bug.set_letter(1, Colors.Red)
         bug.set_letter(2, Colors.Red)
         bug.set_letter(3, Colors.Red)

@@ -1,11 +1,25 @@
 from neopixel import Color
 from utils import Pattern
 
+def split_color(c):
+    """ Split a 32 bit color in GRB into three ints """
+    b , c = c % 256 , c >> 8
+    g , c = c % 256 , c >> 8
+    r = c % 256
+    return g, r, b
+
+def make_color(g, r, b):
+    c = r
+    c = c << 8
+    c += g
+    c = c << 8
+    c += b
+
 class Colors(object):
-    Red = Color(0,255,0)
-    Green = Color(255, 0, 0)
-    White = Color(180,180,180)
-    Blank = Color(0,0,0)
+    Red = make_color(0,255,0)
+    Green = make_color(255, 0, 0)
+    White = make_color(180,180,180)
+    Blank = make_color(0,0,0)
 
 class Patterns(object):
 
@@ -28,3 +42,4 @@ class Patterns(object):
 
     Christmas = Pattern([Colors.Red, Colors.Green, Colors.White])
     ChristmasBlank = Pattern([Colors.Red, Colors.Green, Colors.White, Colors.Blank])
+

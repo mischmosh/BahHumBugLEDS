@@ -1,22 +1,52 @@
+from argparse import Namespace
 import itertools as it
+import math
 import time
 
+class Pattern(object):
+
+    def __init__(self, colors, width=10):
+        self.colors = colors
+        self.width = width
+
+    def get_patch_color(self, i, w=0):
+        w = w if w != 0 else self.width
+        color_idx = (i // w) % len(self)
+        return self.colors[color_idx]
+
+    def __len__(self):
+        return len(self.colors)
+
+    def __iter__(self):
+        w = self.width
+        for i in it.count():
+            yield self.get_patch_color(i,w)
+
+    def make(self, n=0, w=0):
+        for i in xrange(n) if n != 0 else it.count():
+            yield self.get_patch_color(i, w)
+
 class Pixels(object):
+    """
+        Represents a set of pixels (by default all pixels). A pattern can
+        be appied to all pixels.
+    """
 
     def __init__(self, strip):
         self.strip = strip
+        self.pixels = range(self.strip.numPixels())
 
     def __len__(self):
-        return self.strip.numPixels()
+        return len(self.pixels)
 
     def __getitem__(self, n):
-        return list(range(len(self)))[n]
+        return self.pixels[n]
 
     def __iter__(self):
-        return xrange(self.strip.numPixels())
+        return xrange(len(self))
 
     def set_pattern(self, pattern, offset=0, ms=0):
-        for c , i in zip(pattern, range(len(self))):
+        for c , i in zip(pattern, xrange(len(self))):
             idx = (i+offset) % len(self)
             self.strip.setPixelColor(self[idx], c)
             if ms > 0:
@@ -31,6 +61,7 @@ class Pixels(object):
         self.strip.show()
 
     def clear(self):
+        """ Clear all pixels on strip """
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, 0)
 
@@ -121,56 +152,23 @@ class Word(Pixels):
             c = self.strip.getPixelColor(letter[idx])
             self.strip.setPixelColor(new_p, c)
 
-class Pattern(object):
-
-    def __init__(self, colors, width=10):
-        self.colors = colors
-        self.width = width
-
-    def get_patch_color(self, i, w=0):
-        w = w if w != 0 else self.width
-        color_idx = (i // w) % len(self)
-        return self.colors[color_idx]
-
-    def __len__(self):
-        return len(self.colors)
-
-    def __iter__(self):
-        w = self.width
-        for i in it.count():
-            yield self.get_patch_color(i,w)
-
-    def make(self, n=0, w=0):
-        for i in xrange(n) if n != 0 else it.count():
-            yield self.get_patch_color(i, w)
-
-
+Effects = Namespace() # Object to hold custom effects
 class Effect(object):
 
-    # Flags for clearing strip before and after effect
-    BOTH   = 0b11
-    BEFORE = 0b10
-    AFTER  = 0b01
-    NONE   = 0b00
-
-    def __init__(self, cps=0, clear=BOTH):
+    def __init__(self, cps=0):
         self.cps = cps
-        self.clear = clear
+
+    def __call__(self, word, sec=2, **kwargs):
+        self.apply(word, sec, **kwargs)
 
     def apply(self, word, sec=2, **kwargs):
-        clear = kwargs.get('clear', self.clear)
         cps = kwargs.get('cps', self.cps)
         
-
         num_cycles = int(sec * cps)
         cycle_wait = 1.0 / cps
         kwargs['num_cycles'] = num_cycles
 
         self.setup_vars(**kwargs)
-
-        if clear & Effect.BEFORE:
-            word.clear()
-
         self.setup(word)
 
         if cps <= 0:
@@ -183,9 +181,6 @@ class Effect(object):
             time.sleep(cycle_wait)
 
         self.finish(word)
-
-        if clear & Effect.AFTER:
-            word.clear()
 
     def setup(self, word):
         pass
@@ -201,9 +196,8 @@ class Effect(object):
 
 class RotateLettersEffect(Effect):
     
-    def __init__(self, cps=50, clear=None):
+    def __init__(self, cps=20):
         self.cps = cps
-        self.clear = clear if clear is not None else Effect.BOTH 
 
         self.s1 , self.s2 , self.s3 = None , None , None
         self.p1 , self.p2 , self.p3 = None , None , None
@@ -230,33 +224,63 @@ class RotateLettersEffect(Effect):
         else:
             word.rotate_letters(self.s1, self.s2, self.s3)
 
-class FadeEffect(Effect):
+Effects.roatate_letters = RotateLettersEffect()
 
-    def __init__(self, cps=60, start_bright=10, end_bright=255, clear=Effect.AFTER):
-        self.cps = cps
-        self.clear = clear
-        self.start_bright = start_bright
-        self.end_bright = end_bright
+class FadeEffect(Effect):
+    """ Fades Green, Red and White pixels. From start_bright (>=1) to end_bright (default: 255) """
+
+    def __init__(self, cps=30, start_bright=1, end_bright=255, ms=0):
+        self.cps = cps if cps > 0 else 0
+        self.start_bright = start_bright if start_bright >=1 else 1
+        self.end_bright = end_bright if end_bright <= 255 else 255
+        self.ms = ms if ms > 0 else 0
 
     def setup_vars(self, **kwargs):
         self.cps = kwargs.get('cps', self.cps)
+        if self.cps < 0: self.cps = 0
+
         self.start_bright = kwargs.get('start_bright', self.start_bright)
+        if self.start_bright < 1: self.start_bright = 1
+
         self.end_bright = kwargs.get('end_bright', self.end_bright)
-        self.num_cycles = kwargs['num_cycles']
+        if self.end_bright > 255: self.end_bright = 255
+
+        self.delta  = (self.end_bright - self.start_bright) / (1.0 * kwargs.get('num_cycles',1))
+        self.sign = 1 if self.delta >= 0 else -1
+        self.delta = math.abs(self.delta)
+        self.ms = kwargs.get('ms', self.ms)
 
     def setup(self, word):
-        self.initial_bright = word.strip.getBrightness()
-        word.strip.setBrightness(self.start_bright)
+        """ Set all colors to start_bright """
+        for p in word:
+            c = word.strip.getColor(p)
+            word.strip.setColor(p, get_color(c, 0))
+            if self.ms > 0:
+                time.sleep(ms/1000.0)
+            word.strip.show()
 
-    def get_brightness(self, i):
-        delta = (self.end_bright - self.start_bright) * ( 1.0 * i / self.num_cycles )
-        return int(self.start_bright + delta)
+    def get_brightness(self, c, i):
+        import colors # import here to avoid cyclical import
+        v = int(self.start_bright + self.delta * i)
+        g, r, b = colors.split_color(c)
+        if g > r: # assume green
+            g, r, b = v, 0, 0
+        elif r > g: # assume red
+            g, r, b = 0, v, 0
+        else: # assume white
+            g, r, b = v, v, v
+        return colors.make_color(g, r, b)
 
     def cycle(self, word, i):
-        word.strip.setBrightness(self.get_brightness(i))
+        for p in word:
+            c = word.strip.getPixelColor(p)
+            word.strip.setPixelColr(p,self.get_brightness(c,i))
+            if self.ms > 0:
+                    time.sleep(ms/1000.0)
+            word.strip.show()
+        word.strip.show()
 
-    def finish(self, word):
-        word.strip.setBrightness(self.initial_bright)
+Effects.fade = FadeEffect()
 
 class ChaseLetterEffect(Effect):
 
@@ -273,10 +297,9 @@ class ChaseLetterEffect(Effect):
                 [1, 2, 0]]
         }
 
-    def __init__(self, pattern=None, cps=5, clear=Effect.BOTH, mode=LOOP):
+    def __init__(self, pattern=None, cps=5, mode=LOOP):
         self.cps = cps
         self.pattern = pattern
-        self.clear = clear
         self.mode = mode
 
     def color_word(self, word, i=0):
@@ -297,4 +320,11 @@ class ChaseLetterEffect(Effect):
     def cycle(self, word, i):
         self.color_word(word, i)
 
+Effects.chase_letter = ChaseLetterEffect()
 
+if __name__ == '__main__':
+    
+    print 'Effect names and values'
+
+    for name , value in Effects.__dict__.items():
+        print '\t', name , value
