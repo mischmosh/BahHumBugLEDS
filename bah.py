@@ -15,7 +15,7 @@ from neopixel import *
 from letters import *
 
 # LED strip configuration:
-LED_COUNT      = 303     # Number of LED pixels.
+LED_COUNT      = 313     # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
@@ -258,6 +258,16 @@ if __name__ == '__main__':
 		set_grb(strip)
 
 		sparkleChristmas(strip, bug_pixels, sec=2)
+		set_grb(strip)
+
+                sparkleChristmas(strip, fa_pixels, sec=1)
+		set_grb(strip)
+                sparkleChristmas(strip, la_pixels, sec=0.5)
+		set_grb(strip)
+                for _ in range(7):
+                    sparkleChristmas(strip, la_pixels, sec=0.125)
+                    set_grb(strip)
+                sparkleChristmas(strip, lah_pixels, sec=2)
 		set_grb(strip)
 
 		sparklePopRandom(strip, sec=2)

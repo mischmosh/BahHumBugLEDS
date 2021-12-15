@@ -13,48 +13,22 @@
 
 # New Letters
 
-w1_left_straight = range(0,22)
-w1_middle_bar_left = range(65,72)
-w1_upper_arc = range(23,41) + range(71,64,-1)
-w1_lower_arc = range(41,50) + range(90,95) + range(50,65)
-w1_right_straight = range(77,100)
-w1_middle_bar_full = w1_middle_bar_left + range(72,77)
+letterB1 = range(0,22) + range(23,41) + range(71,64,-1) + range(41,50) + range(95,100) + range(50,65)
+letterH1 = range(0,23) + range(65,77) + range(82,105)
+letterF1 = range(0,22) + range(23,30) + range(81,76,-1) + range(65,73)
+letterL1 = range(22,-1,-1) + range(64,56,-1) + range(109,104,-1)
 
-w2_left_swoop = range(147,180)
-w2_diagnol = range(100,125)
-w2_middle_bar = range(146,140,-1)
-w2_right_upper_straight = range(125, 141)
-w2_right_upper_straight_rev = range(140,124,-1)
-w2_right_lower_straight = range(180,185)
+letterA2 = range(110,151) + range(190,195) + range(156,150,-1)
+letterU2 = range(157,190) + range(150,134,-1)
 
-w3_left_straight_full = range(185,208)
-w3_lower_left_straight = range(185,191)
-w3_left_straight = range(191,202)
-w3_left_straight_rev = range(201,190,-1)
-w3_upper_left_straight = range(202,208)
-
-w3_right_straight_full = range(231,254)
-w3_lower_right_straight = range(248,254)
-w3_lower_right_straightG = range(246,254)
-w3_right_straight = range(237,248)
-w3_upper_right_straight = range(231,237)
-
-w3_lower_arc = range(272,254,-1)
-w3_upper_arc = range(286,304)
-w3_upper_valley = range(208,231)
-w3_middle_bar = range(274,286) 
-
-letterB1 = w1_left_straight + w1_upper_arc + w1_lower_arc
-letterH1 = w1_left_straight + w1_middle_bar_full + w1_right_straight
-
-letterA2 = w2_diagnol + w2_right_upper_straight + w2_right_lower_straight + w2_middle_bar
-letterU2 = w2_left_swoop + w2_right_upper_straight_rev
-
-letterH3 = w3_left_straight_full + w3_middle_bar + w3_right_straight_full
-letterM3 = w3_left_straight_full + w3_upper_valley + w3_right_straight_full
-letterG3 = w3_upper_arc + w3_left_straight_rev + w3_lower_arc + w3_lower_right_straightG
+letterH3 = range(195,218) + range(284,296) + range(241,264)
+letterM3 = range(195,264)
+letterG3 = [247] + range(296,314) + range(211,200,-1) + range(282,264,-1) + range(256,263)
 
 
 bah_pixels = letterB1 + letterA2 + letterH3
 hum_pixels = letterH1 + letterU2 + letterM3
 bug_pixels = letterB1 + letterU2 + letterG3
+fa_pixels = letterF1 + letterA2
+la_pixels = letterL1 + letterA2
+lah_pixels = letterL1 + letterA2 + letterH3
